@@ -15,6 +15,7 @@ def assert_ceiling_compat(score, ceiling, warn_only=True):
     metric_type = score.attrs.get('metric_type')
     ceiling_type = ceiling.attrs.get('ceiling_type')
     if metric_type is None or ceiling_type is None:
+        warnings.warn("Missing metric_type or ceiling_type attrs; skipping compatibility check")
         return
     if (metric_type, ceiling_type) in METRIC_CEILING_CHECK:
         return
