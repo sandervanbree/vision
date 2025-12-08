@@ -22,7 +22,9 @@ class CrossRegressedCorrelation(Metric):
         self.correlation = correlation
 
     def __call__(self, source: DataAssembly, target: DataAssembly) -> Score:
-        return self.cross_validation(source, target, apply=self.apply, aggregate=self.aggregate)
+        score = self.cross_validation(source, target, apply=self.apply, aggregate=self.aggregate)
+        score.attrs['metric_type'] = 'correlation'  # record model metric type
+        return score
 
     def apply(self, source_train, target_train, source_test, target_test):
         self.regression.fit(source_train, target_train)
@@ -46,7 +48,7 @@ class ScaledCrossRegressedCorrelation(Metric):
         return self.cross_regressed_correlation(source, target)
 
 
-class SingleRegression:
+class SingleRegression:    
     def __init__(self):
         self.mapping = []
 
@@ -79,7 +81,7 @@ def pls_regression(regression_kwargs=None, xarray_kwargs=None):
     regression_defaults = dict(n_components=25, scale=False)
     regression_kwargs = {**regression_defaults, **(regression_kwargs or {})}
     regression = PLSRegression(**regression_kwargs)
-    xarray_kwargs = xarray_kwargs or {}
+    xarray_kwargs = xarray_kwargs or {}    
     regression = XarrayRegression(regression, **xarray_kwargs)
     return regression
 
