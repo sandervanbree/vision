@@ -19,7 +19,7 @@ def assert_ceiling_compat(score, ceiling, warn_only=True):
         return
     if (metric_type, ceiling_type) in METRIC_CEILING_CHECK:
         return
-    msg = f"Incompatible metric ({metric_type}) vs ceiling ({ceiling_type}); check noise-ceiling mapping."
+    msg = f"Incompatible metric ({metric_type}) vs ceiling ({ceiling_type}), check noise-ceiling mapping."
     if warn_only:
         warnings.warn(msg)
     else:
