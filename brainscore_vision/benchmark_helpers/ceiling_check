@@ -1,0 +1,25 @@
+import warnings
+
+METRIC_CEILING_CHECK = {
+    ('correlation', 'reliability'),
+    ('variance_explained', 'reliability'),
+}
+
+def assert_ceiling_compat(score, ceiling, warn_only=True):
+    """
+    Simple guard to catch mismatches between metric output type and ceiling type.
+    Ceiling here is the split-half/SB reliability (a variance ceiling), so a correlation
+    metric must be mapped to it appropriately (via sqrt), and an explained-variance metric
+    divides by it.
+    """
+    metric_type = score.attrs.get('metric_type')
+    ceiling_type = ceiling.attrs.get('ceiling_type')
+    if metric_type is None or ceiling_type is None:
+        return
+    if (metric_type, ceiling_type) in METRIC_CEILING_CHECK:
+        return
+    msg = f"Incompatible metric ({metric_type}) vs ceiling ({ceiling_type}); check noise-ceiling mapping."
+    if warn_only:
+        warnings.warn(msg)
+    else:
+        raise ValueError(msg)
