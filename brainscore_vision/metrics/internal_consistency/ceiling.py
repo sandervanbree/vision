@@ -43,6 +43,7 @@ class _SplitHalvesConsistency(Ceiling):
             half1, half2 = self._average_repetitions(half1), self._average_repetitions(half2)
             consistency = self._consistency_metric(half1, half2)
             corrected_consistency = self._correction(consistency, n=2)
+            corrected_consistency.attrs['ceiling_type'] = 'reliability'  # record ceiling type for comparison with model metric; facilitating ceiling-to-model metric check
             return corrected_consistency
 
         def _average_repetitions(self, assembly):
